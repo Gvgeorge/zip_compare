@@ -1,7 +1,3 @@
-'''
-Запуск: python compare_zip.py zipfile1.zip zipfile2.zip
-'''
-
 import sys
 from typing import NamedTuple
 from zipfile import ZipFile, ZipInfo, BadZipFile
