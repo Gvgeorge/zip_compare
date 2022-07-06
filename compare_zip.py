@@ -10,12 +10,13 @@ class ZippedFileInfo(NamedTuple):
 
 def _get_zip_item_set(zipfile_name: str) -> set[ZippedFileInfo]:
     result = set()
-    with ZipFile(zipfile_name) as zfile:
+    with ZipFile(zipfile_name, 'r') as zfile:
         for item in zfile.namelist():
             if ZipInfo(item).is_dir():
                 continue
             file_info = zfile.getinfo(item)
-            result.add(ZippedFileInfo(file_info.filename, file_info.CRC))
+            unicode_name = file_info.filename.encode('cp437').decode('cp866')
+            result.add(ZippedFileInfo(unicode_name, file_info.CRC))
     return result
 
 
@@ -67,7 +68,7 @@ if __name__ == '__main__':
         compare_zip_item_sets(first_zipfile_name, second_zipfile_name)
     except FileNotFoundError:
         print('Не удалось найти один из файлов, возможно вы забыли добавить',
-              'окончание .zip?')
+              'окончание .zip ?')
         sys.exit()
     except BadZipFile:
         print('Не удалось обработать один из файлов')
